@@ -1,0 +1,16 @@
+model:
+  provider: openrouter
+  default: poolside/laguna-s-2.1:free
+
+timezone: Asia/Jakarta
+
+memory:
+  memory_enabled: true
+  user_profile_enabled: true
+  memory_char_limit: 2200
+  user_char_limit: 1375
+  nudge_interval: 10
+  write_approval: true
+
+terminal:
+  backend: local
