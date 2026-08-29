@@ -1,11 +1,10 @@
-FROM python:3.12-slim
+FROM nousresearch/hermes-agent:latest
 
-WORKDIR /app
+USER root
 
-COPY requirements.txt .
+ENV HERMES_HOME=/opt/data
 
-RUN pip install --no-cache-dir -r requirements.txt
+COPY config.yaml /opt/hermes/cli-config.yaml.example
+COPY SOUL.md /opt/hermes/docker/SOUL.md
 
-COPY app.py .
-
-CMD ["gunicorn", "--bind", "0.0.0.0:10000", "app:app"]
+CMD ["gateway", "run"]
