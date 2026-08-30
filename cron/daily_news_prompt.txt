@@ -1,0 +1,117 @@
+Buat DAILY NEWS & AI-FINANCE DIGEST untuk MRK.
+
+WAJIB gunakan web_search untuk mencari informasi aktual dari internet. Jangan menjawab hanya berdasarkan pengetahuan model.
+
+Fokus waktu:
+- Prioritaskan berita dari 24 jam terakhir.
+- Untuk breaking news, prioritaskan perkembangan dari beberapa jam terakhir.
+- Jangan memasukkan berita lama hanya untuk menambah jumlah berita.
+- Jangan mengulang berita yang substansinya sama.
+
+CAKUPAN WAJIB:
+
+1. HOT NEWS INDONESIA
+Cari perkembangan paling penting dan sedang menjadi perhatian di Indonesia, termasuk bila relevan:
+- nasional;
+- ekonomi;
+- industri;
+- kebijakan;
+- teknologi;
+- bencana atau kejadian besar;
+- isu penting lain yang berdampak luas.
+
+2. HOT NEWS DUNIA
+Cari perkembangan internasional paling penting dari berbagai kawasan.
+Prioritaskan berita yang memiliki dampak global, geopolitik, ekonomi, teknologi, keamanan, energi, atau perubahan besar lainnya.
+
+3. ARTIFICIAL INTELLIGENCE & TEKNOLOGI
+Cari perkembangan AI terkini, antara lain:
+- model AI baru;
+- OpenAI, Google, Anthropic, Meta, NVIDIA dan perusahaan AI penting lainnya;
+- AI agent;
+- otomasi;
+- teknologi baru;
+- penelitian AI;
+- perkembangan regulasi AI;
+- inovasi yang berpotensi berdampak pada industri atau pekerjaan.
+
+4. KEUANGAN, EKONOMI & INVESTASI
+Cari perkembangan terbaru yang penting, seperti:
+- pasar saham;
+- ekonomi global dan Indonesia;
+- suku bunga;
+- inflasi;
+- rupiah dan mata uang utama;
+- komoditas;
+- emas;
+- kebijakan bank sentral;
+- investasi;
+- perusahaan atau sektor yang mengalami perkembangan signifikan.
+
+5. TOPIK ROTASI HARIAN
+
+Gunakan rotasi berdasarkan hari:
+
+Senin    : olahraga
+Selasa   : kuliner dan tren makanan
+Rabu     : kesehatan
+Kamis    : otomotif dan tips mobil
+Jumat    : self-development dan produktivitas
+Sabtu    : sains dan inovasi
+Minggu   : industri, energi, pertambangan, alumina/bauksit dan hilirisasi
+
+ATURAN RISET:
+
+- Gunakan web_search secara aktif dengan beberapa query, jangan hanya satu pencarian.
+- Jika memungkinkan gunakan web_extract untuk membaca isi sumber penting.
+- Prioritaskan sumber primer dan media yang kredibel.
+- Untuk berita besar atau sensitif, lakukan cross-check dengan lebih dari satu sumber jika memungkinkan.
+- Jangan membuat URL sendiri.
+- Hanya tampilkan URL yang benar-benar ditemukan dari hasil web search.
+- Jika informasi belum dapat diverifikasi, nyatakan dengan jelas.
+- Jangan memasukkan rumor sebagai fakta.
+
+JUMLAH BERITA:
+
+Tidak ada jumlah berita yang ditentukan.
+
+Masukkan semua perkembangan yang benar-benar penting dan relevan yang ditemukan saat pencarian, tetapi jangan menambahkan berita tidak penting hanya untuk memperbanyak daftar.
+
+Lebih baik 10 berita penting daripada 30 berita yang berulang atau tidak signifikan.
+
+FORMAT OUTPUT:
+
+Awali dengan:
+
+📰 DAILY BRIEFING — ASPRI MRK
+📅 [hari dan tanggal]
+🕕 06:00 WIB
+
+Kemudian kelompokkan berdasarkan kategori.
+
+Untuk SETIAP berita gunakan format:
+
+### [Judul berita]
+
+[Ringkasan satu paragraf yang menjelaskan apa yang terjadi, konteksnya, perkembangan terbaru, dan mengapa berita tersebut penting bagi pembaca.]
+
+🔗 Baca lengkap:
+[URL sumber utama]
+
+Jika ada sumber pendukung yang penting:
+🔗 Referensi tambahan:
+[URL]
+
+Di akhir berikan bagian:
+
+## 🔎 Yang Perlu Dipantau Hari Ini
+
+Berikan beberapa perkembangan yang layak dipantau selama hari berjalan, khususnya yang berpotensi berubah cepat.
+
+## 💡 Insight untuk MRK
+
+Berikan 2–5 insight singkat mengenai peluang, risiko, tren, atau hal yang relevan dengan pekerjaan, teknologi, investasi, produktivitas, atau minat MRK berdasarkan keseluruhan berita hari itu.
+
+Gunakan Bahasa Indonesia.
+Jangan mengatakan bahwa pencarian dilakukan jika web_search sebenarnya gagal.
+Jika web_search gagal, katakan bahwa briefing tidak dapat diverifikasi dan jangan mengarang berita.
