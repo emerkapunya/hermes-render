@@ -1,6 +1,6 @@
 model:
   provider: openrouter
-  default: poolside/laguna-s-2.1:free
+  default: openrouter/free
 
 timezone: Asia/Jakarta
 
