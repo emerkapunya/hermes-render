@@ -12,5 +12,9 @@ memory:
   nudge_interval: 10
   write_approval: true
 
+auxiliary:
+  free_only: true
+  openrouter_model: nvidia/nemotron-3-super-120b-a12b:free
+
 terminal:
   backend: local
