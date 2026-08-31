@@ -19,6 +19,4 @@ COPY --chown=hermes:hermes start.sh /opt/bootstrap/start.sh
 
 RUN chmod +x /opt/bootstrap/start.sh
 
-USER hermes
-
 CMD ["bash", "/opt/bootstrap/start.sh"]
