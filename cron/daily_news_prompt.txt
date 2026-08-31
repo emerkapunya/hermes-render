@@ -115,3 +115,73 @@ Berikan 2–5 insight singkat mengenai peluang, risiko, tren, atau hal yang rele
 Gunakan Bahasa Indonesia.
 Jangan mengatakan bahwa pencarian dilakukan jika web_search sebenarnya gagal.
 Jika web_search gagal, katakan bahwa briefing tidak dapat diverifikasi dan jangan mengarang berita.
+
+============================================================
+ATURAN OUTPUT DAN DELIVERY — WAJIB
+============================================================
+
+HASIL AKHIR WAJIB DIKIRIM LANGSUNG KE TELEGRAM.
+
+JANGAN hanya menyimpan hasil ke file lokal.
+JANGAN mengganti laporan lengkap dengan ringkasan.
+JANGAN hanya mengatakan "laporan telah dibuat" atau memberikan path file.
+File lokal boleh dibuat sebagai backup, tetapi seluruh isi briefing tetap WAJIB dikirim ke Telegram.
+
+Setiap berita WAJIB memiliki URL sumber yang benar-benar diperoleh dari web_search/web_extract.
+
+FORMAT WAJIB SETIAP BERITA:
+
+📰 [Judul berita]
+
+[Ringkasan SATU paragraf: jelaskan apa yang terjadi, perkembangan terbaru, konteks penting, serta mengapa berita ini penting.]
+
+🔗 Baca lengkap:
+https://alamat-sumber-asli...
+
+Jika ada sumber tambahan:
+🔗 Referensi tambahan:
+https://alamat-sumber-kedua...
+
+ATURAN URL:
+- Jangan membuat atau menebak URL.
+- Gunakan hanya URL yang benar-benar diperoleh dari hasil web_search/web_extract.
+- Jika tidak menemukan URL valid, jangan masukkan berita tersebut.
+- Minimal satu URL sumber untuk setiap berita.
+
+ATURAN PENGIRIMAN TELEGRAM:
+- Jika laporan terlalu panjang untuk satu pesan Telegram, PECAH menjadi beberapa pesan.
+- Jangan mengurangi isi hanya karena pesan terlalu panjang.
+- Kirim berdasarkan kategori.
+- Gunakan penanda:
+  BAGIAN 1/N
+  BAGIAN 2/N
+  dan seterusnya.
+- Usahakan setiap bagian tidak lebih dari sekitar 3000 karakter.
+- Jangan mengirim hanya ringkasan dari laporan lengkap.
+
+ATURAN WEB:
+- WAJIB melakukan web_search pada setiap eksekusi cron.
+- Gunakan beberapa query berbeda sesuai kategori.
+- Gunakan web_extract untuk sumber utama bila tersedia.
+- Prioritaskan berita 24 jam terakhir.
+- Untuk breaking news prioritaskan perkembangan beberapa jam terakhir.
+- Jangan mengandalkan pengetahuan internal model untuk berita terkini.
+- Jika web_search gagal, katakan pencarian gagal dan jangan mengarang berita.
+
+JUMLAH:
+Tidak ada kuota berita tetap.
+Masukkan semua berita yang benar-benar penting dan aktual.
+Jangan menambah berita hanya untuk memperbanyak jumlah.
+Jangan mengulang berita dengan substansi yang sama.
+
+CHECKLIST SEBELUM MENGIRIM:
+Pastikan:
+[ ] web_search benar-benar digunakan
+[ ] setiap berita mempunyai URL
+[ ] setiap berita mempunyai ringkasan 1 paragraf
+[ ] berita Indonesia ada
+[ ] berita dunia ada
+[ ] AI/teknologi ada
+[ ] keuangan/investasi ada
+[ ] topik rotasi harian ada
+[ ] laporan lengkap dikirim ke Telegram, bukan hanya disimpan sebagai file
