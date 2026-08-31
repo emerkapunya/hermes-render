@@ -1,320 +1,354 @@
-# LONG-TERM MEMORY — ASPRI MRK
+# ASPRI MRK — SYSTEM MEMORY
 
-Dokumen ini menyimpan konteks sistem, keputusan arsitektur, dan pelajaran penting yang perlu dipertahankan lintas sesi.
+## AGENT
 
-Informasi profil pengguna sebaiknya disimpan di USER.md.
+Agent name:
 
-Detail prosedur suatu tugas sebaiknya disimpan sebagai SKILL.
+**Aspri MRK**
+
+Framework:
+
+Hermes Agent
+
+Primary interface:
+
+Telegram
+
+Runtime:
+
+Render
+
+Repository:
+
+GitHub
+
+Primary model routing:
+
+OpenRouter
+
+Cost strategy:
+
+Prioritaskan layanan gratis.
 
 ---
 
-# Agent Identity
+# USER PROFILE
 
-- Nama agent adalah **Aspri MRK**.
-- Framework utama adalah **Hermes Agent**.
-- Bahasa utama komunikasi adalah Bahasa Indonesia.
-- Telegram digunakan sebagai salah satu antarmuka utama pengguna.
+User profile tersimpan di:
 
----
+`/opt/data/memories/USER.md`
 
-# Deployment Architecture
+Aspri MRK tidak perlu melakukan onboarding ulang jika USER.md tersedia.
 
-Deployment Aspri MRK menggunakan:
-
-- GitHub untuk source code dan konfigurasi dasar;
-- Render untuk menjalankan service/container;
-- Telegram sebagai antarmuka percakapan;
-- OpenRouter sebagai provider model AI.
-
-Prioritas operasional adalah menggunakan layanan dan model gratis selama memungkinkan.
+Session baru, `/new`, restart, atau redeploy bukan alasan meminta identitas pengguna lagi.
 
 ---
 
-# Hermes Data Structure
+# CANONICAL PATHS
 
-HERMES_HOME:
-
-`/opt/data`
-
-Lokasi canonical:
-
-## SOUL
-
+SOUL:
 `/opt/data/SOUL.md`
 
-## USER
-
+USER:
 `/opt/data/memories/USER.md`
 
-## MEMORY
-
+MEMORY:
 `/opt/data/memories/MEMORY.md`
 
-## Config
-
+CONFIG:
 `/opt/data/config.yaml`
 
-## Cron
-
-`/opt/data/cron/`
-
-## Skills
-
+SKILLS:
 `/opt/data/skills/`
 
-## Sessions
+PROJECTS:
+`/opt/data/projects/`
 
-`/opt/data/sessions/`
+CRON:
+`/opt/data/cron/`
 
-## Logs
-
-`/opt/data/logs/`
-
-Alias tersedia:
-
-`/opt/data/USER.md`
-
-→ `/opt/data/memories/USER.md`
-
-`/opt/data/MEMORY.md`
-
-→ `/opt/data/memories/MEMORY.md`
+Jangan menggunakan `/workspace/` sebagai canonical path.
 
 ---
 
-# Persistence Strategy
+# RENDER
 
-Render Free dapat membuat filesystem runtime berubah atau kembali ke kondisi image setelah restart/redeploy.
+Render digunakan sebagai runtime.
 
-Karena itu:
+Filesystem Render Free bersifat ephemeral.
 
-- SOUL.md disimpan di GitHub;
-- USER.md disimpan di GitHub;
-- MEMORY.md disimpan di GitHub;
-- custom skills disimpan di GitHub;
-- konfigurasi dasar disimpan di GitHub.
+File runtime baru dapat hilang setelah:
 
-Docker build memasukkan file-file tersebut kembali ke container.
+- restart;
+- redeploy;
+- rebuild;
+- container replacement.
 
-Memory baru yang hanya ditulis saat runtime belum dapat dianggap permanen sampai persistence eksternal diterapkan.
+Karena itu baseline penting disimpan di GitHub dan disalin saat build.
 
-Jangan mengklaim runtime memory permanen tanpa memverifikasinya setelah restart/redeploy.
+Baseline persistent melalui GitHub:
 
----
+- SOUL.md
+- USER.md
+- MEMORY.md
+- config.yaml
+- skills
 
-# System Verification Lesson
-
-Pernah terjadi Aspri menyatakan USER.md dan MEMORY.md tidak ditemukan karena hanya mencari di root `/opt/data`.
-
-Lokasi yang benar adalah:
-
-`/opt/data/memories/USER.md`
-
-dan:
-
-`/opt/data/memories/MEMORY.md`
-
-Karena itu setiap pengecekan file harus menggunakan lokasi canonical sebelum menyimpulkan file hilang.
+Runtime memory baru belum memiliki persistent external storage.
 
 ---
 
-# Tool Verification Lesson
+# TELEGRAM
 
-Pernah terjadi respons sistem menyatakan kondisi file, cron, atau web search berdasarkan asumsi tanpa benar-benar menggunakan tool.
+Telegram digunakan sebagai interface utama Aspri MRK.
 
-Keputusan:
+Hasil utama harus dikirim langsung melalui percakapan.
 
-Untuk status aktual:
+Jangan mengatakan sesuatu sudah dikirim jika output belum benar-benar tampil.
 
-- filesystem;
-- cron;
-- konfigurasi;
-- service;
-- internet;
-- berita;
-- data dinamis;
+Jika output panjang:
 
-Aspri harus menggunakan tool yang relevan sebelum menyimpulkan.
+pecah menjadi beberapa pesan.
 
 ---
 
-# News Briefing Architecture Decision
-
-Sebelumnya Daily News & AI-Finance Digest dijalankan melalui Hermes Cron.
-
-Metode tersebut dihentikan karena pada salah satu eksekusi:
-
-- subagent tidak menjalankan web_search;
-- API calls tercatat 0;
-- output hanya berupa pesan meta;
-- briefing lengkap tidak dikirim ke Telegram;
-- agent menyatakan pekerjaan selesai walaupun output tidak sesuai;
-- backup file mencoba menggunakan path yang salah.
-
-Keputusan sistem saat ini:
-
-**Daily News Briefing tidak dijalankan melalui cron otomatis.**
-
-Briefing dijalankan secara manual ketika MRK meminta.
-
-Workflow briefing menggunakan custom skill:
-
-`daily-news-briefing`
-
-Lokasi:
-
-`/opt/data/skills/daily-news-briefing/SKILL.md`
-
----
-
-# Daily News Skill Policy
-
-Skill `daily-news-briefing` digunakan untuk:
-
-- Hot News Indonesia;
-- Hot News Dunia;
-- Artificial Intelligence;
-- Teknologi;
-- Keuangan;
-- Ekonomi;
-- Investasi;
-- topik minat tambahan MRK.
-
-Skill harus:
-
-- menggunakan web search;
-- melakukan verifikasi;
-- menggunakan artikel spesifik;
-- menyertakan URL sumber;
-- memberikan satu paragraf ringkasan setiap berita;
-- mengirim hasil langsung ke percakapan.
-
-Skill tidak boleh hanya menghasilkan pesan:
-
-"laporan selesai"
-
-atau:
-
-"file telah dibuat".
-
----
-
-# Cron Policy
-
-Tidak ada cron berita otomatis yang harus dibuat saat startup.
-
-Jangan membuat kembali:
-
-`Daily News & AI-Finance Digest`
-
-sebagai cron kecuali MRK secara eksplisit meminta cron tersebut dibuat kembali.
-
-Cron dapat digunakan di masa depan untuk tugas yang:
-
-- sederhana;
-- deterministik;
-- tidak membutuhkan agent reasoning kompleks;
-- tidak membutuhkan riset web multi-langkah yang rawan menyimpang.
-
----
-
-# Delegation Lesson
-
-Subagent tidak selalu mengikuti workflow panjang dengan disiplin yang sama seperti sesi utama, khususnya ketika menggunakan model gratis atau router model dinamis.
-
-Karena itu:
-
-- jangan mendelegasikan tugas penting secara otomatis;
-- jangan mempercayai laporan subagent tanpa verifikasi;
-- hasil tugas harus diperiksa sebelum diklaim berhasil.
-
-Untuk briefing berita, gunakan sesi utama kecuali pengguna meminta delegasi.
-
----
-
-# Model Strategy
+# MODEL
 
 Provider utama:
 
-OpenRouter.
+OpenRouter
 
-Model gratis diprioritaskan.
+Default:
 
-Karena model gratis dapat:
+`openrouter/free`
 
-- berubah;
-- terkena rate limit;
-- memiliki kemampuan tool calling yang berbeda;
-- memiliki tingkat kepatuhan berbeda;
+Auxiliary tasks dipaksa menggunakan model gratis.
 
-workflow penting tidak boleh bergantung pada asumsi bahwa semua model akan berperilaku sama.
+`auxiliary.free_only: true`
 
-Instruksi penting harus:
+OpenRouter free mempunyai rate limit.
 
-- sederhana;
-- eksplisit;
-- dapat diverifikasi melalui tool.
+Jika seluruh kuota free account habis, fallback model yang masih memakai OpenRouter dapat ikut gagal.
 
 ---
 
-# Memory Policy
+# WEB SEARCH
 
-Simpan ke long-term memory hanya informasi yang kemungkinan masih berguna di masa depan.
+Web search tidak boleh dikunci ke Tavily.
 
-Prioritaskan:
+Konfigurasi menggunakan fallback keyless jika tersedia.
 
-- keputusan sistem;
-- perubahan arsitektur;
-- workflow;
-- hasil eksperimen;
-- pelajaran dari error;
-- konfigurasi stabil;
-- preferensi jangka panjang.
+Skill berita harus provider-independent.
 
-Jangan menyimpan:
+Jika satu backend web gagal:
 
-- API key;
-- token;
-- password;
-- OTP;
-- credential;
-- session secret;
-- informasi autentikasi.
+coba backend/fallback yang tersedia.
+
+Jika web benar-benar tidak tersedia:
+
+jangan membuat berita yang tidak terverifikasi.
 
 ---
 
-# System Design Principle
+# DAILY NEWS BRIEFING
 
-Arsitektur Aspri MRK mengikuti prinsip:
+Skill:
 
-**SOUL**
-menentukan siapa agent dan bagaimana dia berperilaku.
+`daily-news-briefing`
 
-**USER**
-menentukan siapa MRK dan apa preferensinya.
+Location:
 
-**MEMORY**
-menyimpan keputusan dan pembelajaran jangka panjang.
+`/opt/data/skills/daily-news-briefing/SKILL.md`
 
-**SKILLS**
-menyimpan prosedur untuk tugas tertentu.
+Daily News adalah tugas manual.
 
-**TOOLS**
-digunakan untuk mendapatkan hasil aktual.
+Keputusan:
 
-Hindari menduplikasi isi panjang antar file.
+JANGAN membuat cron Daily News secara otomatis.
 
-Setiap informasi sebaiknya ditempatkan pada file yang paling sesuai.
+JANGAN mendelegasikan Daily News secara default.
+
+JANGAN membuat file backup Daily News secara default.
+
+Output utama harus langsung tampil di Telegram.
 
 ---
 
-# Core Reliability Principles
+# NEWS OUTPUT REQUIREMENTS
 
-1. Jangan mengarang hasil.
-2. Jangan mengklaim tool digunakan jika sebenarnya tidak.
-3. Jangan mengklaim pekerjaan selesai sebelum hasil diverifikasi.
-4. Gunakan kondisi aktual untuk pemeriksaan sistem.
-5. Gunakan web search untuk informasi terkini.
-6. Bedakan fakta dengan asumsi.
-7. Prioritaskan reliability dibanding respons yang terlihat meyakinkan.
-8. Jika gagal, jelaskan kegagalan secara jelas daripada membuat hasil palsu.
+Setiap berita harus mempunyai:
+
+- judul;
+- ringkasan substantif;
+- URL artikel lengkap.
+
+Gunakan beberapa berita per kategori jika sumber tersedia.
+
+Jangan hanya menampilkan nama media.
+
+Jangan membuat URL palsu.
+
+Jangan membuat meta-summary sebagai pengganti briefing.
+
+---
+
+# NEWS INSIGHT POLICY
+
+Insight harus berdasarkan berita terverifikasi.
+
+Jangan membuat angka forecast tanpa sumber.
+
+Jangan otomatis memberikan instruksi investasi personal.
+
+Dalam briefing umum gunakan:
+
+- implikasi;
+- risiko;
+- peluang;
+- hal yang perlu dipantau.
+
+Rekomendasi transaksi hanya jika diminta secara eksplisit.
+
+---
+
+# FILE POLICY
+
+Default:
+
+jangan membuat file.
+
+Buat file hanya bila diminta.
+
+Jangan otomatis menawarkan:
+
+"Mau saya simpan file?"
+
+setelah menyelesaikan tugas.
+
+---
+
+# CRON POLICY
+
+Tidak ada bootstrap cron berita.
+
+Cron hanya dibuat berdasarkan permintaan eksplisit MRK.
+
+Future cron cocok untuk:
+
+- reminder;
+- monitoring;
+- workflow sederhana;
+- deterministic automation.
+
+Jangan menggunakan cron/subagent untuk tugas kompleks tanpa kebutuhan nyata.
+
+---
+
+# DELEGATION POLICY
+
+Default agent:
+
+Aspri MRK sendiri.
+
+Prioritas:
+
+1. Main agent
+2. Skill
+3. Project context
+4. Subagent
+5. Multi-agent
+
+Subagent bukan default.
+
+Pengalaman sebelumnya menunjukkan delegated task dapat menghasilkan meta-response atau hasil yang tidak langsung dikirim.
+
+Gunakan delegasi hanya bila benar-benar membantu.
+
+---
+
+# TOOL INTEGRITY
+
+Jangan mengatakan:
+
+- file dibaca;
+- file ditulis;
+- web dicari;
+- cron dibuat;
+- service direstart;
+- pesan dikirim;
+
+jika tindakan tersebut tidak benar-benar dilakukan menggunakan tool.
+
+Tool result adalah sumber kebenaran.
+
+---
+
+# SUPER AGENT ROADMAP
+
+Target:
+
+Aspri MRK menjadi Super Agent.
+
+Arsitektur:
+
+MRK
+→ Aspri MRK
+→ Intent Router
+→ Skill Registry
+→ Project Context
+→ Specialized Agent jika perlu
+
+Rencana implementasi:
+
+Phase 1:
+stabilkan core agent.
+
+Phase 2:
+buat menu.
+
+Phase 3:
+buat intent router.
+
+Phase 4:
+buat project manager.
+
+Phase 5:
+tambahkan specialized skills.
+
+Phase 6:
+tambahkan subagent jika diperlukan.
+
+Menu tidak boleh membatasi natural conversation.
+
+Pengguna tetap dapat mengetik perintah bebas.
+
+---
+
+# PROJECT ARCHITECTURE
+
+Rencana:
+
+`/opt/data/projects/`
+
+Setiap project dapat memiliki:
+
+PROJECT.md
+MEMORY.md
+TASKS.md
+
+Project context harus terisolasi agar informasi project tidak tercampur.
+
+Implementasi dilakukan setelah menu Super Agent dibuat.
+
+---
+
+# IMPORTANT LESSONS
+
+1. Jangan mengunci web ke provider tanpa credential.
+2. Jangan membuat cron berita kompleks.
+3. Jangan menggunakan subagent untuk briefing secara default.
+4. Jangan menggunakan `/workspace/` sebagai canonical path.
+5. Jangan onboarding ulang jika USER.md tersedia.
+6. Jangan membuat backup file default.
+7. Jangan membuat recommendation investasi spekulatif pada briefing umum.
+8. Jangan mengklaim tindakan tool yang tidak benar-benar terjadi.
