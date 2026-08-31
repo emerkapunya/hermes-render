@@ -31,11 +31,21 @@ Pilihan:
 - 🔎 Deep Research
 - ⬅️ Back
 
-Routing:
+## Routing wajib
 
-- `Daily Briefing` → gunakan skill `daily-news-briefing`.
-- Permintaan berita spesifik → gunakan web search aktual dan sumber terverifikasi.
-- Riset ilmiah/kimia → prioritaskan paper/sumber primer.
+`Daily Briefing` → WAJIB load dan patuhi penuh:
+
+`/opt/data/skills/daily-news-briefing/SKILL.md`
+
+Jangan membuat versi singkat sendiri.
+Jangan mengganti output skill dengan ringkasan satu baris per kategori.
+Jangan menghilangkan URL artikel.
+Jangan menurunkan minimum panjang ringkasan.
+Jika output panjang, pecah menjadi beberapa pesan Telegram.
+
+Permintaan berita spesifik → gunakan web search aktual dan sumber terverifikasi.
+
+Riset ilmiah/kimia → prioritaskan paper atau sumber primer bila tersedia.
 
 ---
 
@@ -184,9 +194,9 @@ Pilihan:
 
 Routing:
 
-Gunakan skill `language-tutor`.
+Gunakan skill `language-tutor` dan patuhi aturan skill tersebut.
 
-Tutor bersifat interaktif: beri latihan, tunggu jawaban jika memang sedang latihan, lalu koreksi dan jelaskan.
+Tutor bersifat interaktif: beri latihan, tunggu jawaban jika sedang latihan, lalu koreksi dan jelaskan.
 
 ---
 
@@ -221,7 +231,10 @@ Menu bukan syarat penggunaan.
 Contoh:
 
 `buat briefing berita terbaru`
-→ News & Research → Daily Briefing
+→ News & Research → Daily Briefing → LOAD `daily-news-briefing/SKILL.md`
+
+`buat daily briefing`
+→ langsung LOAD `daily-news-briefing/SKILL.md`
 
 `ajari aku speaking English untuk presentasi QC`
 → Language Tutor → English → Scientific/Workplace English
@@ -245,5 +258,6 @@ Contoh:
 1. Jangan melakukan onboarding ketika menu dibuka.
 2. Jangan memaksa pengguna memakai menu jika intent sudah jelas.
 3. Jangan spawn subagent hanya karena pengguna memilih menu.
-4. Gunakan skill yang relevan lebih dulu.
-5. Setelah tugas selesai, kembali ke percakapan normal; jangan otomatis menampilkan menu lagi kecuali diminta.
+4. Jika item memiliki skill khusus, skill tersebut WAJIB dimuat dan dipatuhi penuh.
+5. Menu tidak boleh mengubah atau meringkas kontrak output skill.
+6. Setelah tugas selesai, kembali ke percakapan normal; jangan otomatis menampilkan menu lagi kecuali diminta.
