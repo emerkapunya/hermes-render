@@ -1,5 +1,5 @@
 # =========================================================
-# ASPRI MRK — HERMES CONFIG
+# ASPRI MRK — HERMES CONFIGURATION
 # =========================================================
 
 timezone: Asia/Jakarta
@@ -15,10 +15,8 @@ model:
 # =========================================================
 # FALLBACK MODELS
 # =========================================================
-# Catatan:
-# Ini hanya membantu kalau model tertentu sedang penuh.
-# Kalau kuota harian OpenRouter akun sudah habis total,
-# fallback sesama OpenRouter tetap bisa ikut gagal.
+# Membantu jika model tertentu penuh.
+# Tidak mengatasi limit harian OpenRouter secara keseluruhan.
 
 fallback_providers:
   - provider: openrouter
@@ -30,33 +28,21 @@ fallback_providers:
 # =========================================================
 # AUXILIARY TASKS
 # =========================================================
-# Paksa auxiliary task tetap memakai model gratis.
+# Jangan izinkan auxiliary task memakai model berbayar.
 
 auxiliary:
   free_only: true
-
-  compression:
-    provider: openrouter
-    model: nvidia/nemotron-3-super-120b-a12b:free
-    fallback_chain:
-      - provider: openrouter
-        model: inclusionai/ring-2.6-1t:free
-
-  web_extract:
-    provider: openrouter
-    model: nvidia/nemotron-3-super-120b-a12b:free
-    fallback_chain:
-      - provider: openrouter
-        model: inclusionai/ring-2.6-1t:free
+  openrouter_model: nvidia/nemotron-3-super-120b-a12b:free
 
 # =========================================================
 # WEB SEARCH
 # =========================================================
+# Jangan mengunci ke Tavily atau provider tertentu.
+# Biarkan Hermes memilih backend web yang tersedia.
 
 web:
-  backend: tavily
-  use_gateway: false
   keyless_fallback: true
+  keyless_rescue: true
 
 # =========================================================
 # MEMORY
