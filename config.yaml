@@ -13,22 +13,16 @@ model:
   default: openrouter/free
 
 # =========================================================
-# FALLBACK MODELS
+# FALLBACK MODEL
 # =========================================================
-# Membantu jika model tertentu penuh.
-# Tidak mengatasi limit harian OpenRouter secara keseluruhan.
 
 fallback_providers:
   - provider: openrouter
     model: nvidia/nemotron-3-super-120b-a12b:free
 
-  - provider: openrouter
-    model: inclusionai/ring-2.6-1t:free
-
 # =========================================================
 # AUXILIARY TASKS
 # =========================================================
-# Jangan izinkan auxiliary task memakai model berbayar.
 
 auxiliary:
   free_only: true
@@ -37,15 +31,13 @@ auxiliary:
 # =========================================================
 # WEB SEARCH
 # =========================================================
-# Jangan mengunci ke Tavily atau provider tertentu.
-# Biarkan Hermes memilih backend web yang tersedia.
 
 web:
   keyless_fallback: true
   keyless_rescue: true
 
 # =========================================================
-# MEMORY
+# MEMORY & USER PROFILE
 # =========================================================
 
 memory:
@@ -57,14 +49,14 @@ memory:
   write_approval: true
 
 # =========================================================
-# AGENT BEHAVIOR
+# AGENT
 # =========================================================
 
 agent:
   tool_use_enforcement: true
 
 # =========================================================
-# TERMINAL / FILE SYSTEM
+# TERMINAL
 # =========================================================
 
 terminal:
