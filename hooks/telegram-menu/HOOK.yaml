@@ -1,0 +1,6 @@
+name: telegram-menu
+description: Persistent Telegram menu for Aspri MRK Super Agent
+events:
+  - agent:end
+  - session:reset
+  - command:*
