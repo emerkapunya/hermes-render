@@ -24,5 +24,10 @@ auxiliary:
   free_only: true
   openrouter_model: nvidia/nemotron-3-super-120b-a12b:free
 
+agent:
+  tool_use_enforcement: true
+
 terminal:
   backend: local
+  cwd: /opt/data
+  
