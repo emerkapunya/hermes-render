@@ -9,9 +9,6 @@ web:
   use_gateway: false
   keyless_fallback: true
 
-cron:
-  wrap_response: false
-
 memory:
   memory_enabled: true
   user_profile_enabled: true
