@@ -16,6 +16,7 @@ RUN mkdir -p \
     /opt/data/logs \
     /opt/data/menu \
     /opt/data/projects \
+    /opt/data/hooks/telegram-menu \
     /opt/data/skills/daily-news-briefing \
     /opt/data/skills/language-tutor \
     /opt/bootstrap
@@ -42,6 +43,15 @@ RUN ln -sf /opt/data/memories/USER.md /opt/data/USER.md \
 # =========================================================
 
 COPY menu/MENU.md /opt/data/menu/MENU.md
+
+# =========================================================
+# GATEWAY HOOKS
+# =========================================================
+
+COPY hooks/telegram-menu/HOOK.yaml \
+    /opt/data/hooks/telegram-menu/HOOK.yaml
+COPY hooks/telegram-menu/handler.py \
+    /opt/data/hooks/telegram-menu/handler.py
 
 # =========================================================
 # SKILLS
