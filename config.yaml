@@ -1,13 +1,66 @@
+# =========================================================
+# ASPRI MRK — HERMES CONFIG
+# =========================================================
+
+timezone: Asia/Jakarta
+
+# =========================================================
+# MAIN MODEL
+# =========================================================
+
 model:
   provider: openrouter
   default: openrouter/free
 
-timezone: Asia/Jakarta
+# =========================================================
+# FALLBACK MODELS
+# =========================================================
+# Catatan:
+# Ini hanya membantu kalau model tertentu sedang penuh.
+# Kalau kuota harian OpenRouter akun sudah habis total,
+# fallback sesama OpenRouter tetap bisa ikut gagal.
+
+fallback_providers:
+  - provider: openrouter
+    model: nvidia/nemotron-3-super-120b-a12b:free
+
+  - provider: openrouter
+    model: inclusionai/ring-2.6-1t:free
+
+# =========================================================
+# AUXILIARY TASKS
+# =========================================================
+# Paksa auxiliary task tetap memakai model gratis.
+
+auxiliary:
+  free_only: true
+
+  compression:
+    provider: openrouter
+    model: nvidia/nemotron-3-super-120b-a12b:free
+    fallback_chain:
+      - provider: openrouter
+        model: inclusionai/ring-2.6-1t:free
+
+  web_extract:
+    provider: openrouter
+    model: nvidia/nemotron-3-super-120b-a12b:free
+    fallback_chain:
+      - provider: openrouter
+        model: inclusionai/ring-2.6-1t:free
+
+# =========================================================
+# WEB SEARCH
+# =========================================================
 
 web:
   backend: tavily
   use_gateway: false
   keyless_fallback: true
+
+# =========================================================
+# MEMORY
+# =========================================================
 
 memory:
   memory_enabled: true
@@ -17,14 +70,24 @@ memory:
   nudge_interval: 10
   write_approval: true
 
-auxiliary:
-  free_only: true
-  openrouter_model: nvidia/nemotron-3-super-120b-a12b:free
+# =========================================================
+# AGENT BEHAVIOR
+# =========================================================
 
 agent:
   tool_use_enforcement: true
 
+# =========================================================
+# TERMINAL / FILE SYSTEM
+# =========================================================
+
 terminal:
   backend: local
   cwd: /opt/data
-  
+
+# =========================================================
+# DELEGATION
+# =========================================================
+
+delegation:
+  max_iterations: 250
