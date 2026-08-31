@@ -1,118 +1,223 @@
 ---
 name: daily-news-briefing
-description: Membuat briefing berita terkini Indonesia dan dunia dengan web search, verifikasi sumber, ringkasan satu paragraf, dan URL artikel asli.
-version: 1.0.0
+description: Membuat briefing berita terkini Indonesia dan dunia menggunakan web search aktual, verifikasi sumber, ringkasan satu paragraf, dan URL artikel asli.
+version: 2.0.0
 author: MRK
 ---
 
-# Daily News Briefing — Aspri MRK
+# DAILY NEWS BRIEFING — ASPRI MRK
 
 ## Tujuan
 
-Gunakan skill ini ketika MRK meminta:
+Skill ini digunakan ketika MRK meminta:
 
 - briefing berita;
+- briefing pagi;
 - berita terbaru;
 - hot news;
-- update berita hari ini;
-- update AI dan keuangan;
-- daily news;
-- berita Indonesia dan dunia.
+- breaking news;
+- berita Indonesia;
+- berita dunia;
+- update AI;
+- update teknologi;
+- update keuangan;
+- update investasi;
+- perkembangan terkini.
 
-Tugas ini harus dijalankan pada sesi percakapan saat ini.
+Skill ini dijalankan pada sesi percakapan utama.
 
 JANGAN membuat cron.
-JANGAN mendelegasikan pekerjaan ini ke subagent kecuali MRK secara eksplisit memintanya.
+
+JANGAN mendelegasikan tugas ini ke subagent kecuali MRK secara eksplisit meminta delegasi.
 
 ---
 
-# WAJIB WEB SEARCH
+# PRINCIP UTAMA
 
-Sebelum membuat briefing:
+Berita terkini harus berdasarkan informasi aktual dari internet.
 
-1. WAJIB gunakan `web_search`.
-2. Gunakan beberapa query yang berbeda.
-3. Prioritaskan berita maksimal 24 jam terakhir.
-4. Untuk breaking news, prioritaskan beberapa jam terakhir.
-5. Gunakan `web_extract` pada sumber penting jika tersedia.
-6. Jangan membuat berita berdasarkan pengetahuan internal model saja.
+Pengetahuan internal model TIDAK boleh digunakan sebagai satu-satunya sumber untuk berita terkini.
 
-Jika web_search tidak berhasil:
+WAJIB gunakan tool web.
+
+Tidak boleh mengarang:
+- berita;
+- angka;
+- tanggal;
+- nama;
+- kutipan;
+- fakta;
+- sumber;
+- URL.
+
+Jika berita tidak berhasil diverifikasi, jangan masukkan ke briefing.
+
+---
+
+# WEB SEARCH POLICY
+
+## Provider Independence
+
+Skill ini TIDAK bergantung pada Tavily, Firecrawl, Exa, Brave, DDGS, atau provider tertentu.
+
+Jangan mengunci proses pencarian pada nama backend tertentu.
+
+Gunakan tool:
+
+`web_search`
+
+yang tersedia di Hermes pada saat eksekusi.
+
+Yang penting adalah tool web berhasil memberikan hasil aktual.
+
+---
+
+# RESEARCH FLOW
+
+Untuk setiap briefing:
+
+1. Gunakan `web_search`.
+2. Lakukan beberapa pencarian berbeda sesuai kategori.
+3. Prioritaskan berita dari 24 jam terakhir.
+4. Untuk breaking news, prioritaskan perkembangan beberapa jam terakhir.
+5. Gunakan `web_extract` jika tersedia untuk membaca artikel penting.
+6. Cross-check informasi penting jika diperlukan.
+7. Verifikasi tanggal publikasi.
+8. Verifikasi angka, nama, perusahaan, institusi, dan fakta utama.
+9. Pastikan URL mengarah ke artikel yang relevan.
+10. Buang berita yang tidak dapat diverifikasi.
+
+Jangan hanya melakukan satu query untuk seluruh briefing.
+
+---
+
+# JIKA WEB SEARCH GAGAL
+
+Jika `web_search` pertama gagal:
+
+1. coba ulang dengan query yang lebih sederhana;
+2. coba query alternatif;
+3. coba kategori lain;
+4. gunakan fallback backend jika Hermes menyediakannya;
+5. jangan langsung menyimpulkan seluruh web search mati hanya karena satu provider gagal.
+
+Jika setelah beberapa percobaan yang wajar tool web tetap tidak tersedia:
 
 BERHENTI.
 
 Katakan kepada MRK:
 
-"Web search tidak berhasil dijalankan sehingga saya tidak akan membuat briefing yang belum terverifikasi."
+"Web search saat ini tidak tersedia sehingga saya tidak akan membuat briefing yang belum terverifikasi."
 
-JANGAN mengarang berita.
+JANGAN menggunakan pengetahuan internal sebagai pengganti.
+
+JANGAN membuat URL palsu.
+
+JANGAN mengatakan web search berhasil jika tool tidak menghasilkan hasil.
 
 ---
 
-# Cakupan
+# CAKUPAN BERITA
 
-## 1. Hot News Indonesia
+## 1. HOT NEWS INDONESIA
 
-Cari perkembangan paling penting di Indonesia:
+Cari perkembangan paling penting di Indonesia.
+
+Prioritaskan jika relevan:
 
 - nasional;
 - ekonomi;
 - kebijakan;
 - industri;
 - teknologi;
+- energi;
 - bencana;
+- keamanan;
+- sosial;
 - peristiwa besar;
-- isu lain yang berdampak luas.
+- isu yang berdampak luas.
 
-## 2. Hot News Dunia
+---
+
+## 2. HOT NEWS DUNIA
+
+Cari perkembangan internasional paling penting.
 
 Prioritaskan:
 
 - geopolitik;
 - konflik;
+- diplomasi;
 - ekonomi global;
-- keamanan;
 - energi;
+- keamanan;
 - teknologi;
-- perubahan kebijakan besar;
-- peristiwa internasional penting.
+- kebijakan besar;
+- bencana;
+- perkembangan global signifikan.
 
-## 3. Artificial Intelligence & Teknologi
+---
+
+## 3. ARTIFICIAL INTELLIGENCE & TEKNOLOGI
 
 Cari perkembangan terbaru mengenai:
 
 - OpenAI;
-- Anthropic;
 - Google;
+- Anthropic;
 - Meta;
 - NVIDIA;
-- AI agent;
+- Microsoft;
+- AI Agent;
 - model AI baru;
 - open-source AI;
 - otomasi;
+- robotics;
 - hardware AI;
-- penelitian;
-- regulasi AI.
+- penelitian AI;
+- regulasi AI;
+- teknologi baru.
 
-## 4. Keuangan, Ekonomi & Investasi
+Prioritaskan perkembangan yang berdampak pada:
+- pekerjaan;
+- industri;
+- otomasi;
+- data;
+- produktivitas;
+- inovasi.
 
-Cari perkembangan:
+---
+
+## 4. KEUANGAN, EKONOMI & INVESTASI
+
+Cari perkembangan terbaru mengenai:
 
 - IHSG;
 - rupiah;
 - saham;
-- suku bunga;
-- inflasi;
 - emas;
 - komoditas;
+- minyak;
+- suku bunga;
+- inflasi;
+- kebijakan bank sentral;
 - ekonomi Indonesia;
 - ekonomi global;
-- bank sentral;
-- investasi.
+- investasi;
+- perusahaan besar;
+- sektor yang sedang mengalami perubahan signifikan.
 
-## 5. Topik Rotasi
+Angka keuangan wajib diverifikasi sebelum ditampilkan.
 
-Gunakan hari lokal Asia/Jakarta:
+---
+
+# TOPIK ROTASI HARIAN
+
+Gunakan hari lokal:
+
+`Asia/Jakarta`
+
+Rotasi:
 
 Senin:
 Olahraga
@@ -133,142 +238,297 @@ Sabtu:
 Sains dan inovasi
 
 Minggu:
-Industri, energi, pertambangan, bauksit, alumina dan hilirisasi
+Industri, energi, pertambangan, bauksit, alumina, aluminium, dan hilirisasi
+
+Topik rotasi adalah tambahan.
+
+Hot News Indonesia, Hot News Dunia, AI/Teknologi, dan Keuangan tetap wajib.
 
 ---
 
-# Validasi Berita
+# VALIDASI SUMBER
 
-Sebelum sebuah berita dimasukkan:
-
-1. Pastikan artikel benar-benar ditemukan melalui web_search.
-2. Periksa tanggal publikasi.
-3. Pastikan artikel membahas berita yang disebutkan.
-4. Verifikasi angka penting.
-5. Periksa nama orang, perusahaan dan institusi.
-6. Periksa konsistensi fakta.
-7. Gunakan sumber tambahan jika fakta terlihat meragukan.
-8. Untuk berita besar, cross-check dengan sumber lain jika tersedia.
-
-Jika tidak bisa diverifikasi:
-
-JANGAN masukkan berita tersebut.
-
----
-
-# Aturan Sumber
-
-Prioritas:
+Urutan prioritas sumber:
 
 1. sumber resmi;
-2. Reuters / AP / AFP;
-3. media nasional atau internasional bereputasi;
-4. media spesialis yang kredibel.
+2. lembaga pemerintah;
+3. perusahaan atau organisasi terkait;
+4. Reuters;
+5. AP;
+6. AFP;
+7. media nasional atau internasional bereputasi;
+8. media spesialis kredibel.
 
-Hindari sebagai sumber utama:
+Untuk topik tertentu, sumber primer lebih disukai.
+
+Contoh:
+- BMKG untuk cuaca;
+- BI untuk kebijakan moneter;
+- BEI untuk informasi pasar tertentu;
+- perusahaan untuk pengumuman resmi;
+- regulator untuk aturan baru.
+
+---
+
+# SUMBER YANG HARUS DIHINDARI
+
+Jangan gunakan sebagai sumber utama jika ada sumber lebih baik:
 
 - Facebook;
-- posting media sosial tidak resmi;
+- posting sosial media tidak resmi;
+- forum;
 - homepage media;
-- agregator berita;
-- situs yang tidak mempunyai artikel spesifik.
+- halaman kategori;
+- agregator;
+- situs tanpa artikel spesifik.
 
-URL wajib menuju artikel yang relevan.
-
-JANGAN menebak URL.
-
----
-
-# Format Output
-
-Awali dengan:
-
-📰 DAILY BRIEFING — ASPRI MRK
-
-📅 [Hari, tanggal]
-🕒 Update: [jam WIB]
-
-Kemudian:
-
-## 🇮🇩 HOT NEWS INDONESIA
-
-### 📰 [Judul]
-
-[Ringkasan SATU paragraf. Jelaskan apa yang terjadi, konteks, perkembangan terbaru, dan mengapa hal tersebut penting.]
-
-🔗 Baca lengkap:
-[URL artikel]
-
-Jika perlu:
-
-🔗 Referensi tambahan:
-[URL kedua]
+URL harus mengarah langsung ke sumber atau artikel yang relevan.
 
 ---
 
-Gunakan format yang sama untuk:
+# CROSS-CHECK
 
-🌍 HOT NEWS DUNIA
+Lakukan cross-check jika:
 
-🤖 AI & TEKNOLOGI
+- berita berdampak besar;
+- angka terlihat tidak masuk akal;
+- ada konflik informasi;
+- berita bersifat sensitif;
+- informasi berasal dari satu sumber yang lemah;
+- fakta terlihat tidak konsisten.
 
-💰 KEUANGAN, EKONOMI & INVESTASI
+Jika hasil cross-check bertentangan:
 
-🎯 TOPIK ROTASI HARIAN
+jelaskan ketidakpastiannya atau jangan masukkan berita tersebut.
 
 ---
 
-# Jumlah Berita
+# QUALITY CONTROL
+
+Sebelum memasukkan berita, cek:
+
+- Apakah benar terjadi?
+- Apakah tanggalnya relevan?
+- Apakah sumbernya valid?
+- Apakah angka benar?
+- Apakah ringkasan sesuai isi artikel?
+- Apakah URL spesifik?
+- Apakah berita masih aktual?
+- Apakah sudah ada berita lain dengan substansi sama?
+
+Jangan memasukkan berita duplikat.
+
+---
+
+# JUMLAH BERITA
 
 Tidak ada jumlah berita tetap.
 
 Masukkan semua berita yang:
 
-- benar-benar penting;
+- penting;
 - aktual;
 - relevan;
 - berhasil diverifikasi.
 
-Jangan menambah berita hanya untuk memenuhi jumlah.
+Jangan memperbanyak jumlah dengan berita kecil atau berulang.
 
-Jangan mengulang berita dengan substansi sama.
+Kualitas lebih penting daripada kuantitas.
 
 ---
 
-# Penutup
+# FORMAT OUTPUT
+
+Awali dengan:
+
+# 📰 DAILY BRIEFING — ASPRI MRK
+
+📅 [Hari, tanggal]
+
+🕒 Update: [jam WIB]
+
+---
+
+## 🇮🇩 HOT NEWS INDONESIA
+
+### 📰 [Judul berita]
+
+[Ringkasan SATU paragraf yang menjelaskan:
+apa yang terjadi, konteks, perkembangan terbaru, dan mengapa berita ini penting.]
+
+🔗 **Baca lengkap:**
+[URL artikel]
+
+Jika ada sumber kedua yang relevan:
+
+🔗 **Referensi tambahan:**
+[URL]
+
+---
+
+Gunakan format yang sama untuk:
+
+## 🌍 HOT NEWS DUNIA
+
+## 🤖 AI & TEKNOLOGI
+
+## 💰 KEUANGAN, EKONOMI & INVESTASI
+
+## 🎯 TOPIK ROTASI HARIAN
+
+---
+
+# RINGKASAN SETIAP BERITA
+
+Setiap berita harus memiliki satu paragraf ringkasan.
+
+Ringkasan sebaiknya mencakup:
+
+1. apa yang terjadi;
+2. perkembangan terbaru;
+3. konteks penting;
+4. dampak atau alasan berita tersebut relevan.
+
+Jangan hanya mengulang headline.
+
+---
+
+# URL POLICY
+
+Setiap berita WAJIB memiliki minimal satu URL.
+
+URL harus:
+
+- berasal dari hasil web search;
+- valid;
+- spesifik;
+- relevan dengan berita.
+
+JANGAN membuat URL sendiri.
+
+Jika artikel spesifik tidak ditemukan:
+
+JANGAN masukkan berita tersebut.
+
+---
+
+# TELEGRAM DELIVERY
+
+Hasil briefing utama harus dikirim langsung ke percakapan Telegram.
+
+JANGAN hanya:
+
+- membuat file;
+- memberi path file;
+- mengatakan "laporan selesai";
+- mengirim daftar headline tanpa isi;
+- mengirim pesan meta tentang pekerjaan.
+
+Jika hasil terlalu panjang:
+
+pecah menjadi beberapa pesan.
+
+Gunakan format:
+
+BAGIAN 1/N
+
+BAGIAN 2/N
+
+dan seterusnya.
+
+Usahakan pemisahan berdasarkan kategori.
+
+---
+
+# FILE OUTPUT
+
+File lokal boleh dibuat sebagai backup jika diperlukan.
+
+Jika file dibuat, gunakan lokasi aman di bawah:
+
+`/opt/data/`
+
+Contoh:
+
+`/opt/data/briefings/`
+
+Tetapi file lokal TIDAK BOLEH menggantikan pengiriman hasil ke Telegram.
+
+---
+
+# YANG PERLU DIPANTAU
+
+Di akhir briefing tambahkan:
+
+## 🔎 YANG PERLU DIPANTAU HARI INI
+
+Berikan perkembangan yang:
+
+- masih berlangsung;
+- berpotensi berubah cepat;
+- mungkin menghasilkan update besar pada hari tersebut.
+
+---
+
+# INSIGHT UNTUK MRK
 
 Tambahkan:
 
-## 🔎 YANG PERLU DIPANTAU
-
-Berikan perkembangan yang berpotensi berubah sepanjang hari.
-
 ## 💡 INSIGHT UNTUK MRK
 
-Berikan 2–5 insight praktis mengenai:
+Berikan sekitar 2–5 insight yang relevan dengan:
 
 - pekerjaan;
+- Quality Control;
 - industri;
 - AI;
+- otomasi;
+- teknologi;
 - investasi;
-- peluang;
+- produktivitas;
 - risiko;
-- produktivitas.
+- peluang.
+
+Insight harus berdasarkan keseluruhan briefing, bukan dibuat secara acak.
 
 ---
 
-# Larangan Penting
+# FINAL CHECKLIST
+
+Sebelum mengirim hasil akhir, pastikan:
+
+- [ ] web_search benar-benar digunakan;
+- [ ] beberapa query digunakan;
+- [ ] berita aktual;
+- [ ] sumber valid;
+- [ ] setiap berita memiliki URL;
+- [ ] setiap berita memiliki ringkasan satu paragraf;
+- [ ] Hot News Indonesia ada;
+- [ ] Hot News Dunia ada;
+- [ ] AI & Teknologi ada;
+- [ ] Keuangan/Ekonomi/Investasi ada;
+- [ ] topik rotasi ada;
+- [ ] tidak ada URL yang dibuat-buat;
+- [ ] tidak ada berita yang tidak terverifikasi;
+- [ ] output lengkap dikirim ke Telegram;
+- [ ] output bukan sekadar pesan meta.
+
+Jika checklist gagal pada berita tertentu:
+
+hapus berita tersebut atau perbaiki sebelum mengirim.
+
+---
+
+# LARANGAN
 
 JANGAN:
 
-- hanya mengatakan "laporan selesai";
-- hanya memberikan lokasi file;
-- mengganti laporan lengkap dengan ringkasan meta;
-- mengatakan web_search digunakan jika sebenarnya tidak digunakan;
-- membuat URL sendiri;
-- membuat fakta sendiri;
-- menyimpan hasil ke file sebagai pengganti jawaban Telegram.
-
-Hasil utama harus dikirim langsung dalam percakapan Telegram.
-
-Jika terlalu panjang, pecah hasil menjadi beberapa pesan.
+- membuat cron;
+- mendelegasikan briefing tanpa permintaan MRK;
+- mengatakan sedang bekerja di background jika tidak ada proses nyata;
+- membuat klaim tool palsu;
+- membuat berita palsu;
+- membuat URL palsu;
+- menyimpulkan web mati hanya karena satu provider gagal;
+- menggunakan pengetahuan internal sebagai pengganti web search aktual;
+- mengklaim selesai sebelum hasil lengkap benar-benar dikirim.
