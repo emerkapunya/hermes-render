@@ -185,3 +185,40 @@ Pastikan:
 [ ] keuangan/investasi ada
 [ ] topik rotasi harian ada
 [ ] laporan lengkap dikirim ke Telegram, bukan hanya disimpan sebagai file
+
+============================================================
+VALIDASI KUALITAS BERITA — WAJIB
+============================================================
+
+Sebelum memasukkan sebuah berita ke laporan:
+
+1. Buka dan baca sumber dengan web_extract jika memungkinkan.
+2. Pastikan judul, tanggal, angka, nama, dan fakta utama sesuai dengan sumber.
+3. Periksa tanggal publikasi.
+4. Prioritaskan berita maksimal 24 jam terakhir.
+5. Berita lebih lama hanya boleh dimasukkan jika ada perkembangan baru hari ini.
+6. Jangan gunakan homepage/domain umum sebagai referensi.
+7. URL harus mengarah langsung ke artikel yang membahas berita tersebut.
+8. Jika angka atau fakta terlihat tidak konsisten, lakukan web_search kedua untuk cross-check.
+9. Untuk berita besar, gunakan minimal 2 sumber independen jika tersedia.
+10. Jika tidak berhasil diverifikasi, JANGAN masukkan berita itu.
+
+KHUSUS DATA:
+- Jangan menyebut angka harga, indeks, klasemen, jumlah korban, persentase,
+  atau tanggal tanpa memverifikasinya dari sumber.
+- Periksa konsistensi logis data.
+- Contoh: liga yang belum dimulai tidak mungkin memiliki klasemen dengan puluhan poin.
+
+SUMBER:
+Prioritaskan:
+1. sumber resmi / institusi terkait;
+2. Reuters, AP, AFP atau media internasional bereputasi;
+3. media nasional kredibel;
+4. media spesialis kredibel.
+
+Hindari menjadikan:
+- Facebook;
+- posting sosial media tidak resmi;
+- situs agregator;
+- homepage media;
+sebagai sumber utama jika sumber yang lebih baik tersedia.
