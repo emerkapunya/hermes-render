@@ -1,398 +1,222 @@
 ---
 name: daily-news-briefing
-description: Membuat briefing berita terbaru dengan beberapa berita per kategori, riset ilmiah dan kimia, ringkasan minimal 50 kata, verifikasi web, tanggal aktual, dan URL artikel asli.
-version: 7.0.0
-author: MRK
+description: Membuat Daily Briefing aktual untuk MRK dengan berita Indonesia, dunia, AI, ekonomi, riset ilmiah/kimia, dan topik rotasi harian.
+version: 8.0.0
 ---
 
 # DAILY NEWS BRIEFING — ASPRI MRK
 
 ## PURPOSE
 
-Gunakan skill ini ketika MRK meminta:
+Skill ini membuat briefing berita terbaru untuk MRK.
 
-- briefing berita;
-- briefing pagi;
-- berita terbaru;
-- hot news;
-- breaking news;
-- update berita;
-- update AI;
-- update teknologi;
-- update ekonomi;
-- update investasi;
-- berita riset;
-- penelitian terbaru;
-- riset kimia terbaru.
+Output harus:
 
-Hasil utama harus langsung tampil dalam percakapan Telegram.
+- aktual;
+- terverifikasi;
+- substantif;
+- mudah dibaca;
+- relevan;
+- menggunakan Bahasa Indonesia;
+- memiliki sumber langsung.
 
-JANGAN membuat file secara default.
+Skill ini digunakan secara manual.
 
-JANGAN membuat cron.
+JANGAN membuat cron otomatis.
 
 JANGAN menggunakan subagent secara default.
 
-JANGAN memberikan meta-summary sebagai pengganti briefing.
+JANGAN membuat file backup secara default.
+
+Output langsung ke chat / Telegram.
 
 ---
 
-# USER CONTEXT
+# TRIGGERS
 
-MRK merupakan lulusan:
+Aktifkan skill jika pengguna mengatakan:
 
-**Sarjana Kimia**
+- `🔥 Daily Briefing`
+- `Daily Briefing`
+- `daily briefing`
+- `buat daily briefing`
+- `briefing berita`
+- `briefing pagi`
+- `berita terbaru`
+- `buat briefing berita terbaru`
 
-dan bekerja di bidang:
+Jika trigger berasal dari Telegram button:
 
-**Quality Control pada industri pengolahan bauksit menjadi alumina.**
+`🔥 Daily Briefing`
 
-Karena itu briefing harian harus memiliki kategori tetap:
+perlakukan persis sebagai:
 
-**🧪 RISET ILMIAH & KIMIA**
+`buat daily briefing`
 
-Kategori tersebut muncul setiap hari.
+Jangan tampilkan menu lagi sebelum tugas selesai.
 
 ---
 
-# CURRENT DATE — WAJIB
+# DATE & TIME — HARD RULE
 
-Sebelum menentukan briefing:
+Timezone:
 
-1. Tentukan tanggal aktual.
-2. Gunakan timezone `Asia/Jakarta`.
-3. Tentukan nama hari dari tanggal tersebut.
-4. Jangan menggunakan hari atau tanggal dari session lama.
-5. Pastikan tanggal dan hari konsisten.
-6. Tentukan rotasi berdasarkan hari aktual.
+`Asia/Jakarta`
 
-Jika tanggal aktual:
+Sebelum melakukan pencarian:
 
-`1 September 2026`
+1. tentukan tanggal aktual;
+2. tentukan nama hari aktual;
+3. pastikan tanggal dan hari konsisten;
+4. tentukan kategori rotasi berdasarkan hari.
 
-maka hari:
-
-`Selasa`
-
-dan rotasi:
-
-`Kuliner dan tren makanan`
+JANGAN menggunakan tanggal dari session lama.
 
 JANGAN menebak nama hari.
 
----
-
-# WEB SEARCH — WAJIB
-
-Semua berita terkini harus menggunakan web.
-
-Gunakan:
-
-`web_search`
-
-Jika tersedia dan diperlukan:
-
-`web_extract`
-
-Jangan menggunakan knowledge internal sebagai satu-satunya sumber
-berita aktual.
+Jika runtime/system time tersedia, gunakan itu.
 
 ---
 
-# PROVIDER INDEPENDENCE
+# DAILY ROTATION
 
-Jangan bergantung pada provider web tertentu.
+Topik rotasi berdasarkan hari:
 
-Jangan mengunci skill ke:
+- Senin → Olahraga
+- Selasa → Kuliner & Tren Makanan
+- Rabu → Kesehatan
+- Kamis → Otomotif & Tips Mobil
+- Jumat → Self-development & Produktivitas
+- Sabtu → Sains & Inovasi
+- Minggu → Industri, Energi, Pertambangan, Bauksit, Alumina, Aluminium & Hilirisasi
 
-- Tavily;
-- Brave;
-- DDGS;
-- Exa;
-- Firecrawl;
-- provider tertentu.
+Kategori:
 
-Gunakan backend web yang tersedia melalui Hermes.
+`Riset Ilmiah & Kimia`
 
-Jika backend pertama gagal:
-
-coba fallback yang tersedia.
-
----
-
-# SEARCH FAILURE
-
-Jika web_search pertama gagal:
-
-1. coba query yang lebih sederhana;
-2. coba query alternatif;
-3. coba kategori berbeda;
-4. gunakan fallback backend jika tersedia.
-
-Jika web benar-benar tidak tersedia:
-
-BERHENTI.
-
-Tampilkan:
-
-`Web search saat ini tidak tersedia sehingga saya tidak akan membuat briefing yang belum terverifikasi.`
-
-Jangan membuat berita dari internal knowledge.
-
----
-
-# SOURCE LEDGER — WAJIB
-
-Sebelum menulis briefing, buat source ledger internal.
-
-Untuk setiap kandidat berita simpan:
-
-- Title
-- Source
-- Publication date
-- Full URL
-- Main facts
-- Category
-
-Untuk scientific research tambahkan jika tersedia:
-
-- Journal / Publisher
-- Research institution
-- DOI
-- Research method
-- Key finding
-
-Contoh internal:
-
-SOURCE 01
-
-Title:
-...
-
-Source:
-Nature Chemistry
-
-Date:
-...
-
-URL:
-https://www.nature.com/articles/...
-
-DOI:
-...
-
-Facts:
-...
-
-Method:
-...
-
-Category:
-Scientific Research & Chemistry
-
-Source ledger tidak ditampilkan ke pengguna.
-
----
-
-# URL REQUIREMENT
-
-Setiap berita WAJIB memiliki URL artikel lengkap.
-
-URL harus:
-
-- berasal dari hasil web search;
-- valid;
-- spesifik;
-- mengarah ke artikel atau sumber primer.
-
-Tampilkan URL penuh.
-
-Contoh BENAR:
-
-🔗 **Baca lengkap:**
-https://www.reuters.com/world/example-article/
-
-Contoh BENAR untuk paper:
-
-🔬 **Paper / sumber primer:**
-https://pubs.acs.org/doi/10.xxxx/xxxxx
-
-JANGAN menggunakan:
-
-`Reuters`
-
-`BBC`
-
-`Nature`
-
-`ACS`
-
-`[Kompas]`
-
-sebagai pengganti URL.
-
-Jika URL spesifik tidak tersedia:
-
-jangan masukkan item tersebut.
-
----
-
-# URL VALIDATION
-
-Sebelum digunakan:
-
-cek URL:
-
-- dimulai dengan http:// atau https://;
-- berasal dari hasil tool;
-- bukan hasil tebakan;
-- relevan dengan judul;
-- bukan homepage jika artikel spesifik tersedia.
-
-Jangan membuat URL sendiri.
+tetap muncul setiap hari.
 
 ---
 
 # REQUIRED CATEGORIES
 
-Briefing WAJIB memiliki:
+Daily Briefing wajib memiliki:
 
-## 🇮🇩 HOT NEWS INDONESIA
+1. 🇮🇩 Hot News Indonesia
+2. 🌍 Hot News Dunia
+3. 🤖 AI & Teknologi
+4. 💰 Keuangan, Ekonomi & Investasi
+5. 🧪 Riset Ilmiah & Kimia
+6. 🔄 Topik Rotasi Harian
 
-## 🌍 HOT NEWS DUNIA
-
-## 🤖 AI & TEKNOLOGI
-
-## 💰 KEUANGAN, EKONOMI & INVESTASI
-
-## 🧪 RISET ILMIAH & KIMIA
-
-## 🎯 TOPIK ROTASI HARIAN
+Jangan menghilangkan kategori tanpa alasan kuat.
 
 ---
 
-# TARGET NEWS COUNT
+# WEB SEARCH — REQUIRED
 
-Jika sumber aktual tersedia:
+Daily Briefing WAJIB menggunakan web search aktual.
 
-Indonesia:
-3–5 berita.
+Jangan membuat briefing hanya dari knowledge internal.
 
-Dunia:
-3–5 berita.
+Untuk setiap berita:
 
-AI & Teknologi:
-3–5 berita.
+- gunakan hasil pencarian aktual;
+- prioritaskan sumber yang terpercaya;
+- ambil URL artikel spesifik;
+- jangan membuat URL;
+- jangan mengarang detail yang tidak ada di sumber.
 
-Keuangan/Ekonomi/Investasi:
-3–5 berita.
+Jika web search tersedia:
 
-Riset Ilmiah & Kimia:
-2–4 berita.
+gunakan.
 
-Rotasi:
-2–3 berita.
+Jika web search gagal total:
 
-Jumlah bukan kewajiban mutlak.
+JANGAN membuat berita dari ingatan.
 
-Kualitas dan verifikasi lebih penting daripada jumlah.
+Gunakan pesan:
+
+`⚠️ Daily Briefing tidak dapat dibuat dengan aman karena web search gagal atau sumber aktual tidak tersedia. Saya tidak akan mengarang berita.`
 
 ---
 
-# HOT NEWS INDONESIA
+# SOURCE PRIORITY
+
+## Berita Umum
 
 Prioritaskan:
 
-- nasional;
-- kebijakan;
-- ekonomi;
-- industri;
-- energi;
-- bencana;
-- teknologi;
-- sosial;
-- keamanan;
-- hukum;
-- peristiwa besar.
+- media nasional/internasional terpercaya;
+- kantor berita;
+- official company blog untuk pengumuman perusahaan;
+- regulator;
+- lembaga pemerintah;
+- organisasi resmi.
+
+Contoh:
+
+- Reuters
+- AP
+- Bloomberg
+- CNBC
+- BBC
+- ANTARA
+- Kompas
+- Tempo
+- Katadata
+- CNBC Indonesia
+- Google Blog
+- Microsoft Blog
+- OpenAI
+- NVIDIA
+- perusahaan terkait
+- regulator / kementerian / lembaga resmi
 
 ---
 
-# HOT NEWS DUNIA
+# SCIENTIFIC SOURCE PRIORITY
 
-Prioritaskan:
+Untuk kategori:
 
-- geopolitik;
-- konflik;
-- diplomasi;
-- ekonomi global;
-- energi;
-- kebijakan;
-- bencana;
-- peristiwa internasional besar.
+`🧪 Riset Ilmiah & Kimia`
 
----
+prioritaskan:
 
-# AI & TECHNOLOGY
+1. paper asli;
+2. publisher jurnal;
+3. DOI;
+4. universitas;
+5. research institution;
+6. scientific society;
+7. preprint jika memang relevan dan diberi konteks.
 
-Prioritaskan:
+Hindari hanya menggunakan artikel media sekunder jika primary source tersedia.
 
-- OpenAI;
-- Anthropic;
-- Google;
-- Meta;
-- Microsoft;
-- NVIDIA;
-- AI Agent;
-- model AI;
-- automation;
-- robotics;
-- AI chips;
-- datacenter;
-- cybersecurity;
-- AI regulation;
-- scientific AI.
+Sumber ideal:
 
-Jika tidak ada berita AI besar:
-
-gunakan perkembangan teknologi lain yang relevan.
-
-JANGAN menggunakan olahraga untuk menggantikan AI.
+- Nature
+- Science
+- ACS
+- RSC
+- Wiley
+- Elsevier
+- Springer
+- university research pages
+- research institutes
+- arXiv jika sesuai
+- publisher jurnal resmi
 
 ---
 
-# FINANCE, ECONOMY & INVESTMENT
+# SCIENTIFIC TOPICS OF INTEREST
 
-Prioritaskan:
+Prioritaskan jika tersedia:
 
-- IHSG;
-- rupiah;
-- saham;
-- emas;
-- minyak;
-- commodities;
-- interest rate;
-- inflation;
-- central banks;
-- Indonesian economy;
-- global economy;
-- major companies;
-- investment.
-
-Angka keuangan wajib diverifikasi.
-
----
-
-# SCIENTIFIC RESEARCH & CHEMISTRY
-
-Kategori ini WAJIB muncul setiap hari.
-
-Cari perkembangan terbaru dalam:
-
-- chemistry;
 - analytical chemistry;
+- materials chemistry;
 - inorganic chemistry;
 - physical chemistry;
-- materials chemistry;
 - industrial chemistry;
 - catalysis;
 - electrochemistry;
@@ -400,7 +224,8 @@ Cari perkembangan terbaru dalam:
 - chromatography;
 - mass spectrometry;
 - laboratory instrumentation;
-- sensors;
+- analytical methods;
+- sample preparation;
 - corrosion;
 - surface chemistry;
 - environmental chemistry;
@@ -414,485 +239,508 @@ Cari perkembangan terbaru dalam:
 - alumina;
 - aluminium;
 - process chemistry;
-- analytical methods;
 - chemometrics;
+- sensors;
 - laboratory automation.
 
 ---
 
-# SCIENTIFIC SOURCE PRIORITY
+# SOURCE LEDGER
 
-Untuk riset ilmiah prioritaskan:
+Sebelum menulis output final, buat source ledger internal.
 
-1. paper original;
-2. journal publisher;
-3. scientific society;
-4. university;
-5. research institution;
-6. national laboratory;
-7. official research press release;
-8. media sains kredibel.
+Untuk setiap kandidat berita catat:
 
-Contoh sumber yang dapat diprioritaskan jika relevan:
+- title;
+- source;
+- date;
+- URL;
+- key facts;
+- relevance;
+- category.
 
-- ACS;
-- RSC;
-- Nature;
-- Science;
-- Wiley;
-- Springer Nature;
-- Elsevier;
-- university journals;
-- research institutes.
+Untuk scientific item jika tersedia:
 
-Jangan hanya mengandalkan artikel media populer jika paper asli tersedia.
+- paper title;
+- journal;
+- DOI;
+- research institution;
+- methodology;
+- key finding;
+- limitation.
 
----
+Jangan tampilkan source ledger internal secara mentah.
 
-# SCIENTIFIC ARTICLE FORMAT
-
-Untuk setiap berita riset gunakan format:
-
-### 🧪 [Judul penelitian / temuan]
-
-[Ringkasan minimal 50 kata dan ideal 80–140 kata.]
-
-Ringkasan harus menjelaskan bila tersedia:
-
-- latar belakang masalah;
-- apa yang diteliti;
-- metode atau pendekatan utama;
-- hasil utama;
-- mengapa hasil tersebut penting;
-- potensi aplikasi;
-- relevansi dengan kimia, laboratorium, QC, atau industri.
-
-Jika penelitian masih preliminary:
-
-jelaskan bahwa hasil masih preliminary.
-
-Jika penelitian hanya pada skala laboratorium:
-
-jangan menyatakan seolah-olah sudah siap digunakan industri.
-
-🔬 **Paper / sumber primer:**
-https://...
-
-Jika ada artikel penjelas:
-
-🔗 **Artikel pendukung:**
-https://...
+Gunakan untuk verifikasi.
 
 ---
 
-# SCIENTIFIC INTERPRETATION POLICY
+# LANGUAGE POLICY — HARD RULE
 
-Jangan melebih-lebihkan hasil penelitian.
+Bahasa output Daily Briefing adalah:
 
-Bedakan:
+**BAHASA INDONESIA**
 
-**Temuan:**
-apa yang benar-benar ditemukan.
+Seluruh narasi wajib ditulis dalam Bahasa Indonesia.
 
-**Potensi:**
-apa yang mungkin dapat dilakukan.
+Termasuk:
 
-**Keterbatasan:**
-apa yang belum dibuktikan.
+- judul berita;
+- ringkasan;
+- penjelasan;
+- konteks;
+- analisis;
+- insight;
+- risiko;
+- peluang;
+- watchlist;
+- interpretasi paper;
+- penjelasan ekonomi.
 
-Jangan menggunakan kata:
+Sumber boleh berasal dari bahasa apa pun.
 
-- terbukti;
-- revolusioner;
-- game changer;
-- pasti;
-- akan menggantikan;
+Jika sumber menggunakan:
 
-kecuali sumber mendukung klaim tersebut.
+- English;
+- Chinese;
+- Russian;
+- Japanese;
+- Korean;
+- Arabic;
+- atau bahasa lain;
+
+pahami sumber kemudian TULIS ULANG seluruh narasi dalam Bahasa Indonesia.
+
+JANGAN meneruskan token atau fragmen bahasa asing ke dalam paragraf.
 
 ---
 
-# DAILY ROTATION
+# FOREIGN LANGUAGE LEAKAGE — FORBIDDEN
 
-Gunakan hari aktual Asia/Jakarta.
+Contoh output yang DILARANG:
 
-Senin:
-Olahraga
+`Dell сообщил hasil kuartalan yang превысил ожидания pasar.`
 
-Selasa:
-Kuliner dan tren makanan
+`Rupiah melemah ke уровень Rp17.700.`
 
-Rabu:
-Kesehatan
+`Investor khawatir terhadap 泡沫 sektor AI.`
 
-Kamis:
-Otomotif dan tips mobil
+`Текущий контекст memerlukan monitoring.`
 
-Jumat:
-Self-development dan produktivitas
+Semua harus ditulis ulang.
 
-Sabtu:
-Sains dan inovasi
+Contoh benar:
 
-Minggu:
-Industri, energi, pertambangan, bauksit, alumina, aluminium,
-dan hilirisasi.
+`Dell melaporkan hasil kuartalan yang melampaui ekspektasi pasar.`
 
-Kategori Riset Ilmiah & Kimia tetap ada pada hari Sabtu.
+`Rupiah melemah ke sekitar Rp17.700 per dolar AS.`
 
-Rotasi Sabtu menjadi tambahan sains/inovasi yang lebih luas.
+`Investor khawatir terhadap potensi gelembung valuasi di sektor AI.`
+
+`Kondisi saat ini memerlukan pemantauan lebih lanjut.`
+
+---
+
+# ALLOWED FOREIGN TERMS
+
+Foreign terms hanya boleh dipertahankan jika merupakan:
+
+- nama orang;
+- nama perusahaan;
+- nama produk;
+- nama model;
+- ticker;
+- nama jurnal;
+- judul paper;
+- DOI;
+- nama metode;
+- istilah ilmiah;
+- istilah teknis yang memang lazim.
+
+Contoh:
+
+- Dell Technologies
+- NVIDIA
+- OpenAI
+- Gemini
+- S&P 500
+- US Treasury
+- ICP-OES
+- ICP-MS
+- XRF
+- XRD
+- chemometrics
+- Bayer Process
+
+Kalimat penjelas tetap Bahasa Indonesia.
+
+---
+
+# SCRIPT VALIDATION
+
+Sebelum output dikirim:
+
+cek apakah narasi mengandung:
+
+- Cyrillic;
+- Hanzi yang tidak diperlukan;
+- Kana/Kanji Jepang yang tidak diperlukan;
+- Hangul;
+- aksara Arab;
+- foreign-language fragments.
+
+Jika ditemukan dan bukan proper noun/technical term:
+
+VALIDATION GAGAL.
+
+Tulis ulang paragraf tersebut.
+
+---
+
+# INDONESIAN REWRITE PASS — REQUIRED
+
+Setelah seluruh briefing selesai disusun:
+
+1. baca ulang semua paragraf;
+2. cari foreign-language leakage;
+3. terjemahkan fragmen asing;
+4. tulis ulang kalimat supaya natural;
+5. cek grammar Bahasa Indonesia;
+6. baru kirim.
+
+Jangan hanya menghapus kata asing.
 
 ---
 
 # SUMMARY LENGTH
 
-Setiap berita biasa WAJIB memiliki ringkasan minimal:
+Untuk berita umum:
 
-**50 kata**
+minimum sekitar:
+
+**50 kata per item**
 
 Target ideal:
 
-**70–120 kata**
+**70–120 kata per item**
 
-Setiap berita riset ilmiah ideal:
+Untuk Riset Ilmiah & Kimia:
 
-**80–140 kata**
+minimum sekitar:
 
-Ringkasan harus berupa paragraf substantif.
+**60 kata per item**
 
-Jangan hanya mengulang headline.
+Target ideal:
 
-Jika kurang dari 50 kata:
+**80–140 kata per item**
 
-perpanjang dengan fakta yang tersedia dari sumber.
+Jika sumber tidak cukup kaya, jangan mengarang untuk mengejar panjang.
 
-Jangan menambahkan spekulasi hanya untuk menambah panjang.
+Lebih baik ringkas tetapi akurat daripada mengarang.
 
----
-
-# SOURCE PRIORITY — GENERAL NEWS
-
-Prioritaskan:
-
-1. sumber resmi;
-2. pemerintah/regulator;
-3. organisasi/perusahaan terkait;
-4. Reuters;
-5. Associated Press;
-6. AFP;
-7. media nasional kredibel;
-8. media internasional kredibel;
-9. media spesialis kredibel.
+Namun jangan menulis hanya 1–2 kalimat pendek.
 
 ---
 
-# CROSS-CHECK
+# ITEM COUNTS
 
-Lakukan cross-check jika:
+Target:
 
-- breaking news;
-- berita berdampak besar;
-- angka ekstrem;
-- informasi sensitif;
-- konflik;
-- pasar bergerak tajam;
-- hasil riset terdengar luar biasa;
-- sumber pertama kurang kuat.
+## Hot News Indonesia
 
-Untuk klaim ilmiah besar:
+3–5 item
 
-usahakan cek sumber primer.
+## Hot News Dunia
 
----
+3–5 item
 
-# OUTPUT CONTRACT
+## AI & Teknologi
 
-Respons final harus langsung dimulai dengan:
+3–5 item
 
-# 📰 DAILY BRIEFING — ASPRI MRK
+## Keuangan, Ekonomi & Investasi
 
-JANGAN memulai dengan:
+3–5 item
 
-- Skill loaded.
-- Sedang melakukan web search.
-- Saya akan mencari berita.
-- Berita terverifikasi.
-- Briefing siap.
-- Output sudah dikirim.
+## Riset Ilmiah & Kimia
 
-Langsung tampilkan hasil.
+2–4 item
+
+## Rotasi Harian
+
+2–3 item
+
+Jika benar-benar tidak tersedia cukup sumber berkualitas, jumlah boleh berkurang.
+
+Jangan membuat berita palsu untuk memenuhi kuota.
 
 ---
 
-# HEADER
+# NEWS ITEM FORMAT
+
+Gunakan format:
+
+`📰 Judul Berita`
+
+Ringkasan 50+ kata dalam Bahasa Indonesia.
+
+`🔗 Baca lengkap:`
+
+`https://alamat-artikel-spesifik`
+
+---
+
+# URL POLICY — HARD RULE
+
+Setiap item berita wajib memiliki:
+
+URL artikel spesifik.
+
+JANGAN hanya menulis:
+
+`Reuters`
+
+`Kompas`
+
+`BBC`
+
+atau nama media tanpa URL.
+
+JANGAN membuat URL.
+
+Gunakan URL dari hasil web search.
+
+URL harus dimulai dengan:
+
+`https://`
+
+atau:
+
+`http://`
+
+Jika URL tidak tersedia:
+
+jangan tampilkan item tersebut sebagai berita terverifikasi.
+
+---
+
+# SCIENTIFIC ITEM FORMAT
+
+Untuk item ilmiah gunakan format:
+
+`🧪 Judul Riset`
+
+Jelaskan secara natural:
+
+- masalah / latar belakang;
+- metode atau pendekatan;
+- temuan utama;
+- makna hasil;
+- potensi aplikasi;
+- limitation jika tersedia;
+- relevansi ke QC/laboratorium/industri bila relevan.
+
+Kemudian:
+
+`🔗 Sumber:`
+
+URL paper/publisher/research institution.
+
+Jika DOI tersedia, boleh ditambahkan.
+
+---
+
+# NO PLACEHOLDERS
+
+JANGAN menggunakan placeholder seperti:
+
+- `(singkat)`
+- `dapat disesuaikan`
+- `pantau perkembangan`
+- `tidak ada terobosan besar`
+- `fokus hari ini`
+- `berita akan dilengkapi`
+
+jika kategori seharusnya diisi dengan hasil riset aktual.
+
+Jika tidak ada berita berkualitas:
+
+jelaskan secara singkat bahwa tidak ditemukan kandidat kuat.
+
+Jangan membuat isi generik.
+
+---
+
+# FACTUALITY RULES
+
+Bedakan:
+
+FACT:
+informasi yang memang ada pada sumber.
+
+INTERPRETATION:
+makna atau implikasi yang wajar.
+
+SPECULATION:
+jangan ditulis sebagai fakta.
+
+Untuk ekonomi:
+
+jangan membuat angka, support/resistance, target harga, atau yield tanpa sumber.
+
+Untuk scientific research:
+
+jangan mengubah:
+
+- correlation menjadi causation;
+- preliminary finding menjadi final conclusion;
+- potential application menjadi proven application.
+
+---
+
+# FINANCE SAFETY
+
+Dalam Daily Briefing umum:
+
+JANGAN memberikan personal trading advice.
+
+Hindari:
+
+- beli sekarang;
+- jual sekarang;
+- alokasi sekian persen;
+- cut loss;
+- take profit;
+- target harga pasti.
 
 Gunakan:
 
-# 📰 DAILY BRIEFING — ASPRI MRK
-
-📅 [Hari benar], [Tanggal aktual]
-
-🕒 Update: [jam WIB jika tersedia]
-
----
-
-# GENERAL NEWS ITEM FORMAT
-
-### 📰 [Judul berita]
-
-[Ringkasan minimal 50 kata.]
-
-🔗 **Baca lengkap:**
-https://www.domain.com/path/artikel-spesifik
-
-Jika cross-check penting:
-
-🔗 **Referensi tambahan:**
-https://...
-
----
-
-# SCIENTIFIC NEWS ITEM FORMAT
-
-### 🧪 [Judul riset]
-
-[Ringkasan 80–140 kata bila informasi tersedia.]
-
-🔬 **Paper / sumber primer:**
-https://...
-
-Jika tersedia:
-
-🔗 **Artikel pendukung:**
-https://...
-
----
-
-# TELEGRAM DELIVERY
-
-Jika briefing terlalu panjang:
-
-pecah menjadi beberapa pesan.
-
-Contoh:
-
-BAGIAN 1/6 — Indonesia
-
-BAGIAN 2/6 — Dunia
-
-BAGIAN 3/6 — AI & Teknologi
-
-BAGIAN 4/6 — Keuangan
-
-BAGIAN 5/6 — Riset Ilmiah & Kimia
-
-BAGIAN 6/6 — Rotasi + Watchlist + Insight
-
-Lebih baik beberapa pesan lengkap daripada satu pesan yang terlalu
-dipadatkan.
-
-Jangan menghilangkan URL.
-
-Jangan mempersingkat semua item menjadi headline saja.
-
----
-
-# WATCHLIST
-
-Tambahkan:
-
-## 🔎 YANG PERLU DIPANTAU HARI INI
-
-Berikan perkembangan yang:
-
-- masih berlangsung;
-- dapat berubah cepat;
-- memiliki potensi update;
-- relevan dengan keseluruhan briefing.
-
-Gunakan bahasa faktual.
-
----
-
-# INSIGHT FOR MRK
-
-Tambahkan:
-
-## 💡 INSIGHT UNTUK MRK
-
-Berikan 2–5 insight.
-
-Insight dapat mencakup:
-
-- Implikasi industri;
-- Risiko;
-- Peluang;
-- Relevansi QC;
-- Relevansi laboratorium;
-- Relevansi kimia;
-- Relevansi AI/otomasi;
-- Hal yang perlu dipantau.
-
-Jika ada riset yang relevan dengan pekerjaan MRK:
-
-jelaskan potensi keterkaitannya dengan:
-
-- analytical method;
-- laboratory QC;
-- process control;
-- bauxite/alumina;
-- industrial chemistry.
-
-Jangan menyatakan bahwa teknologi siap digunakan jika paper belum
-membuktikannya.
-
----
-
-# INVESTMENT POLICY
-
-Dalam briefing umum:
-
-JANGAN memberikan instruksi transaksi personal.
-
-Jangan otomatis menulis:
-
-- beli;
-- jual;
-- take profit;
-- cut loss;
-- alokasikan sekian persen;
-- target harga.
-
-Gunakan analisis:
-
-- risiko;
-- implikasi;
 - faktor penggerak;
+- risiko;
+- peluang;
+- implikasi;
 - hal yang perlu dipantau.
 
 ---
 
-# NO BACKUP FILE
+# TELEGRAM OUTPUT
 
-JANGAN membuat backup file.
+Output harus langsung tampil di chat.
 
-JANGAN menyimpan briefing otomatis.
+Jika terlalu panjang:
 
-JANGAN menawarkan:
+pecah menjadi beberapa bagian:
 
-`Mau saya simpan sebagai file?`
+`BAGIAN 1/6`
 
-File hanya dibuat jika MRK secara eksplisit meminta.
+`BAGIAN 2/6`
 
----
+dan seterusnya.
 
-# NO CRON
-
-JANGAN membuat:
-
-- cron;
-- scheduler;
-- recurring task;
-
-kecuali MRK secara eksplisit meminta.
+JANGAN mengurangi isi hanya untuk muat satu pesan.
 
 ---
 
-# NO SUBAGENT
+# OUTPUT STRUCTURE
 
-Jangan spawn subagent secara default.
+Gunakan:
 
-Briefing dilakukan melalui main session.
+`📅 DAILY BRIEFING — [Hari, Tanggal]`
+
+`WIB • Asia/Jakarta`
+
+Kemudian:
+
+`BAGIAN 1/6 — 🇮🇩 HOT NEWS INDONESIA`
+
+isi berita.
+
+Lanjut:
+
+`BAGIAN 2/6 — 🌍 HOT NEWS DUNIA`
+
+Lanjut:
+
+`BAGIAN 3/6 — 🤖 AI & TEKNOLOGI`
+
+Lanjut:
+
+`BAGIAN 4/6 — 💰 KEUANGAN, EKONOMI & INVESTASI`
+
+Lanjut:
+
+`BAGIAN 5/6 — 🧪 RISET ILMIAH & KIMIA`
+
+Lanjut:
+
+`BAGIAN 6/6 — 🔄 TOPIK ROTASI HARI INI`
 
 ---
 
-# END RULE
+# FINAL INSIGHT
+
+Akhiri dengan:
+
+`💡 INSIGHT UNTUK MRK`
+
+Buat insight ringkas dan konservatif.
+
+Insight harus:
+
+- berbasis pada berita yang sudah disebutkan;
+- tidak spekulatif berlebihan;
+- tidak menjadi personal buy/sell advice;
+- bila relevan hubungkan dengan QC, teknologi, sains, atau industri.
+
+---
+
+# NO FOLLOW-UP
 
 Setelah:
 
-## 💡 INSIGHT UNTUK MRK
+`💡 INSIGHT UNTUK MRK`
 
-selesai:
-
-AKHIRI RESPONS.
+SELESAI.
 
 JANGAN menambahkan:
 
-- Mau saya simpan?
-- Mau saya pantau?
-- Mau saya buat cron?
-- Mau saya perdalam?
-- Mau saya carikan lagi?
-- Ada lagi?
+- `mau saya simpan?`
+- `mau saya buat versi PDF?`
+- `mau saya lanjutkan?`
+- `mau kategori tertentu diperluas?`
+- `ada lagi?`
 
 ---
 
-# FINAL VALIDATION
+# FINAL VALIDATION CHECKLIST
 
-Untuk setiap berita cek:
-
-- [ ] URL lengkap tersedia.
-- [ ] URL berasal dari web search.
-- [ ] URL menuju artikel spesifik.
-- [ ] Ringkasan minimal 50 kata.
-- [ ] Fakta sesuai sumber.
-- [ ] Tanggal relevan.
-
-Untuk scientific research cek:
-
-- [ ] sumber primer dicari;
-- [ ] metode dijelaskan jika tersedia;
-- [ ] key finding jelas;
-- [ ] aplikasi tidak dilebih-lebihkan;
-- [ ] limitation disebut jika penting.
-
-Untuk keseluruhan briefing cek:
+Sebelum kirim pastikan:
 
 - [ ] tanggal aktual benar;
 - [ ] nama hari benar;
-- [ ] rotasi benar;
-- [ ] Indonesia tersedia;
-- [ ] Dunia tersedia;
-- [ ] AI tersedia;
-- [ ] Finance tersedia;
-- [ ] Riset Ilmiah & Kimia tersedia;
-- [ ] Rotasi tersedia;
-- [ ] tidak ada URL palsu;
-- [ ] tidak ada nama media sebagai pengganti URL;
-- [ ] tidak ada onboarding;
-- [ ] tidak ada file offer;
-- [ ] tidak ada speculative investment recommendation.
+- [ ] rotasi harian benar;
+- [ ] web search digunakan;
+- [ ] sumber aktual digunakan;
+- [ ] setiap item memiliki URL spesifik;
+- [ ] URL tidak dibuat;
+- [ ] ringkasan minimal sekitar 50 kata;
+- [ ] kategori Riset Ilmiah & Kimia ada;
+- [ ] sumber primer diprioritaskan untuk riset;
+- [ ] seluruh narasi Bahasa Indonesia;
+- [ ] tidak ada Cyrillic;
+- [ ] tidak ada Hanzi acak;
+- [ ] tidak ada foreign-language leakage;
+- [ ] tidak ada placeholder;
+- [ ] tidak ada personal trading advice;
+- [ ] output langsung ke chat;
+- [ ] tidak membuat file otomatis;
+- [ ] tidak membuat cron;
+- [ ] tidak menambahkan follow-up.
 
-Jika checklist gagal:
+Jika salah satu poin penting gagal:
 
 perbaiki sebelum mengirim.
 
----
+Jika tidak dapat diperbaiki:
 
-# CORE WORKFLOW
-
-current date verification
-
-→ web_search
-
-→ source ledger
-
-→ source / paper validation
-
-→ web_extract bila diperlukan
-
-→ cross-check
-
-→ write substantive summary
-
-→ full URL
-
-→ Telegram
-
-→ scientific research section
-
-→ watchlist
-
-→ conservative insight
-
-→ END
+jangan mengarang.
